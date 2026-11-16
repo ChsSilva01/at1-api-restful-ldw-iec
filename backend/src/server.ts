@@ -20,7 +20,11 @@ app.use(
 );
 
 app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'OK', mensagem: 'Servidor operacional.' });
+  res.status(200).json({
+    status: 'ok',
+    uptime: Math.round(process.uptime()),
+    mensagem: 'Servidor operacional.',
+  });
 });
 
 app.use('/api', appRoutes);

@@ -87,3 +87,32 @@ docker compose down --volumes
 
 ```
 
+## Entrega Contínua (IEC) - Deploy no Render
+
+A esteira fica em `.github/workflows/cd.yml` e roda a cada push na branch `main`:
+
+1. **CI**: checkout, instalação com pnpm, `tsc --noEmit` e build do backend.
+2. **Docker build**: `docker build` da imagem de produção (`backend/Dockerfile`).
+3. **Deploy**: `curl -X POST` no Deploy Hook do Render (segredo `RENDER_DEPLOY_HOOK_URL`). O job só executa se os dois anteriores passarem e falha se o Render não responder 200 ou 201.
+
+O **Auto-Deploy** do Web Service no Render está em **No**, então a publicação só acontece pelo webhook, depois da esteira.
+
+### Variáveis de ambiente no Render
+
+| Variável | Valor |
+| --- | --- |
+| `NODE_ENV` | `production` |
+| `DB_HOST` | host do PostgreSQL |
+| `DB_PORT` | `5432` |
+| `DB_NAME` | nome do banco |
+| `DB_USER` | usuário do banco |
+| `DB_PASSWORD` | senha do banco |
+| `DB_SSL` | `true` |
+| `JWT_SECRET` | segredo forte para assinar os tokens |
+
+Health Check Path configurado no serviço: `/api/health`.
+
+```bash
+curl https://SEU-SERVICO.onrender.com/api/health
+# {"status":"ok","uptime":120,"mensagem":"Servidor operacional."}
+```

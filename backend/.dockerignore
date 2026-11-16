@@ -1,4 +1,28 @@
+# Dependencias e build (são gerados dentro da imagem)
 node_modules
 dist
+
+# Versionamento
+.git
+.gitignore
+
+# Variaveis de ambiente e segredos
 .env
+.env.*
+!.env.example
+
+# Arquivos de teste e cobertura
+coverage
+**/*.test.ts
+**/*.spec.ts
+__tests__
+
+# Logs e arquivos de editor/SO
+*.log
+npm-debug.log*
+.vscode
+.DS_Store
+
+# Arquivos que não entram na imagem
 Dockerfile
+.dockerignore
